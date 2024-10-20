@@ -1,0 +1,93 @@
+
+# Docker Compose File Explained
+
+## What is a Docker Compose File?
+- A Docker Compose file (`docker-compose.yml`) is a YAML configuration used to define and manage multiple Docker 
+	containers. 
+- It simplifies running multi-container applications with just one command by describing how containers should 
+	behave, connect, and share resources.
+- Docker Compose helps with orchestration, allowing services to be spun up and connected with ease.
+
+---
+
+## Structure of a Docker Compose File
+
+Below is a breakdown of key components of a `docker-compose.yml` file:
+
+1. **version**:
+   - Specifies the Compose file format version. Latest is usually `3.x`.
+   - Example: `version: "3.9"`
+
+2. **services**:
+   - Defines individual containers (services) to be deployed.
+   - Each service runs one image in a container with specific configurations (e.g., ports, environment variables).
+
+3. **networks**:
+   - Configures custom Docker networks for container communication.
+   - Useful for controlling how services are exposed to each other.
+
+4. **volumes** (Optional):
+   - Persistent storage for services, ensuring data persists even if the container stops.
+
+---
+
+## Example Docker Compose File with Networking
+
+```yaml
+version: "3.9"
+
+services:
+  web:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    networks:
+      - my-network
+
+  database:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+```
+
+---
+
+## Explanation of the Example
+
+1. **version**:
+   - Specifies the Compose version being used (`3.9` in this case).
+
+2. **services**:
+   - Defines two services:
+     - `web`: Runs an Nginx server and exposes it on port 8080 of the host.
+     - `database`: Runs MySQL with a root password set via environment variables.
+
+3. **ports**:
+   - Maps port `80` of the `web` container to port `8080` on the host machine.
+
+4. **environment**:
+   - Sets the environment variables for the `database` service, configuring MySQL credentials.
+
+5. **networks**:
+   - Creates a network called `my-network` using the `bridge` driver (Docker’s default networking driver). 
+   - Both services are connected to this network, allowing them to communicate internally.
+
+---
+
+## Usage
+
+1. Save the YAML content in a `docker-compose.yml` file.
+2. Run `docker-compose up -d` to start the services.
+3. Use `docker-compose down` to stop and remove the containers and network.
+
+---
+
+This file defines:
+- **Two services** (Nginx and MySQL) connected over a **custom bridge network**.
+- Nginx can serve requests, and MySQL acts as a backend, both accessible to each other through the same network.

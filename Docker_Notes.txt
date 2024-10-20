@@ -1,0 +1,121 @@
+### Docker Commands ###
+
+## 1) Basic Commands
+## 2) How to write Dockerfile
+## 3) How to write multi stage Dockerfile
+## 4) Most frequently used commands
+## 5) Other remaining commands
+
+## 1) Basic Docker Commands (Beginner Level)
+-->
+	docker --version       					# Check installed Docker version.
+	docker info            					# Display Docker system-wide information.
+	docker help            					# List available Docker commands.
+	docker images          					# List all local images.
+	docker ps              					# List all running containers.
+	docker ps -a           					# List all containers (including stopped ones).
+	docker pull <image>    					# Download image from Docker Hub.
+	docker run <image>     					# Create and start a container from the image.
+	docker stop <container> 				# Stop a running container.
+	docker start <container> 				# Start a stopped container.
+	docker restart <container> 				# Restart a running/stopped container.
+	docker rm <container>  					# Remove a container.
+	docker rmi <image>     					# Remove an image.
+	docker exec -it <container> <command> 	# Run command inside container interactively.
+	docker logs <container> 				# View logs of a container.
+	docker inspect <object> 				# Show detailed information (container/image/network).
+	docker network ls      					# List all networks.
+	
+---------------------------------------------------------------------------------------------------------------------------
+
+## 2) How to write Dockerfile
+-->
+	# Example Dockerfile to run a simple Python app
+	FROM python:3.9-slim         			# Base image
+	WORKDIR /app                 			# Set working directory inside container
+	COPY . /app                  			# Copy files from current directory to /app
+	RUN pip install -r requirements.txt  	# Install dependencies
+	CMD ["python", "app.py"]     			# Command to run the app
+	
+	-->
+		FROM: 		Specifies the base image.
+		WORKDIR: 	Sets the working directory inside the container.
+		COPY: 		Copies files from host to container.
+		RUN: 		Executes commands to install dependencies.
+		CMD: 		Defines the default command to run when the container starts.
+		
+---------------------------------------------------------------------------------------------------------------------------
+
+## 3) How to write multi stage Dockerfile
+-->
+	A multistage Dockerfile helps to create smaller images by building the app in one stage and copying 
+	only necessary files to the final stage.
+	
+	# Multistage Dockerfile for a Node.js app
+	# Stage 1: Build the app
+	FROM node:16-alpine AS builder       					# Base image for building
+	WORKDIR /app
+	COPY package*.json ./                					# Copy package files
+	RUN npm install                      					# Install dependencies
+	COPY . .                             					# Copy rest of the app code
+	RUN npm run build                    					# Build the app
+
+	# Stage 2: Run the app with minimal image
+	FROM nginx:alpine                    					# Lightweight image
+	COPY --from=builder /app/build /usr/share/nginx/html  	# Copy built files from builder stage
+	EXPOSE 80                            					# Expose port 80
+	CMD ["nginx", "-g", "daemon off;"]   					# Start Nginx server
+	
+	
+	-->
+		AS: Names a stage for later use.
+		COPY --from=builder: Copies files from a specific stage.
+		EXPOSE: Opens a port to make the app accessible.
+		CMD: Starts the Nginx server.
+		
+---------------------------------------------------------------------------------------------------------------------------
+
+## 4) Most frequently used commands
+--> 
+	docker build -t <name>:<tag> . 				# Build an image from Dockerfile.
+	docker tag <image> <new_tag> 				# Tag image with a new name.
+	docker push <name>:<tag>   					# Push image to a Docker registry.
+	docker commit <container> <new_image> 		# Save container as an image.
+	docker cp <source> <container>:<path> 		# Copy file to container.
+	docker-compose up          					# Start services from docker-compose.yml.
+	docker-compose down        					# Stop and remove all services.
+	docker volume ls           					# List all volumes.
+	docker volume rm <volume>  					# Remove a specific volume.
+	docker system prune -a     					# Remove unused data, containers, images, and volumes.
+	docker stats              					# Display real-time resource usage of containers.
+	docker top <container>     					# Display running processes inside a container.
+	
+---------------------------------------------------------------------------------------------------------------------------
+
+## 5) Other remaining commands
+-->
+	docker search <keyword>    			# Search for images on Docker Hub.
+	docker login              			# Authenticate with Docker registry.
+	docker logout              			# Logout from Docker registry.
+	docker events             	 		# Get real-time events from Docker server.
+	docker history <image>     			# Show image creation history.
+	docker diff <container>    			# List changes in a container’s filesystem.
+	docker pause <container>   			# Pause all processes in a container.
+	docker unpause <container> 			# Resume a paused container.
+	docker rename <old> <new>  			# Rename a container.
+	docker attach <container>  			# Attach to a running container's session.
+	docker save <image> -o <path> 		# Save an image to a tar archive.
+	docker load -i <path>      			# Load an image from a tar archive.
+	docker network create <name> 		# Create a custom network.
+	docker network inspect <name> 		# Show details of a network.
+	docker network rm <name>   			# Remove a custom network.
+	
+---------------------------------------------------------------------------------------------------------------------------
+
+### Resources ###
+
+## Huge credits: M. Prashant sir --> [https://youtu.be/OhnTMWmfTBE?si=Ws-CORDjL0f9tB_d]
+## Official: Docker --> https://www.docker.com/
+## Learn Docker --> https://www.docker.com/101-tutorial/
+
+---------------------------------------------------------------------------------------------------------------------------
