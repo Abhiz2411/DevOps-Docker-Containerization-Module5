@@ -1,5 +1,7 @@
 # Module 5: Containerization, Docker, and Docker Hub for DevOps 🐳🚀
 
+![Preview](.preview_image_gif.gif)
+
 Welcome to the GitHub repository for **Module 5: Containerization, Docker, and Docker Hub**! This repository contains detailed notes and step-by-step guides to help you navigate the world of Docker and containerization. 
 
 ## 🚀 Overview of Tasks
